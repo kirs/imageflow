@@ -520,6 +520,8 @@ pub unsafe extern fn imageflow_send_json(context: *mut Context,
 
     //TODO: possibly iterate access to force segfaults earlier?
 
+    //TODO: throw not implemented for job and jobIO right now
+
 
     let mut ctx = ::imageflow_core::ContextPtr::from_ptr(context);
 

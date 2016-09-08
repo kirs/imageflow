@@ -146,6 +146,9 @@ impl Context {
             }
         }
     }
+    pub fn unsafe_borrow_mut_context_pointer(&mut self) -> &mut ContextPtr{
+        &mut *self.p.borrow_mut()
+    }
 
     fn get_error_copy(&self) -> Option<FlowError> {
         (*self.p.borrow()).get_error_copy()
@@ -325,6 +328,12 @@ impl ContextPtr{
                 r#"{"success": "false","code": 418,"message": "I'm a teapot, short and stout"}"#
                     .as_bytes()
             },
+            "v0.0.1/build" => JsonResponse {
+                status_code: 418,
+                response_json:
+                r#"{"success": "false","code": 418,"message": "I'm a teapot, short and stout"}"#
+                    .as_bytes()
+            },
             _ => JsonResponse {
                 status_code: 404,
                 response_json: r#"{
@@ -336,8 +345,8 @@ impl ContextPtr{
         Ok(response)
     }
 
-    fn build_graph(&mut self, json: &[u8]){
-
+    fn build_0_0_1<'a, 'b, 'c>(&'a mut self, json: &'b [u8])  -> JsonResponse<'c>{
+        ::parsing::BuildRequestHandler::new().do_and_respond(&mut self, json)
     }
 
 }

@@ -104,40 +104,128 @@ pub enum Color{
 }
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum Node{
+    #[serde(rename="flipV")]
     FlipV,
+    #[serde(rename="flipH")]
     FlipH,
+    #[serde(rename="crop")]
     Crop{ x1: u32, y1: u32, x2: u32, y2: u32},
+    #[serde(rename="createCanvas")]
     CreateCanvas{ format: PixelFormat, w: usize, h: usize, color: Color},
-    CopyRectToCanvas { from_x: u32, from_y: u32, width: u32, height: u32, x: u32, y: u32},
-    Decode{io_id: i32},
-    Encode{io_id: i32, encoder: Option<Encoder>, encoder_id: Option<i64>, hints: Option<EncoderHints> },
+    #[serde(rename="copyRectToCanvas")]
+    CopyRectToCanvas {
+        #[serde(rename="fromX")]
+        from_x: u32,
+        #[serde(rename="fromY")]
+        from_y: u32, width: u32, height: u32, x: u32, y: u32},
+    #[serde(rename="decode")]
+    Decode{
+        #[serde(rename="ioId")]
+        io_id: i32},
+    #[serde(rename="encode")]
+    Encode{
+        #[serde(rename="ioId")]
+        io_id: i32, encoder: Option<Encoder>,
+        #[serde(rename="encoderId")]
+        encoder_id: Option<i64>, hints: Option<EncoderHints> },
+    #[serde(rename="fillRect")]
     FillRect {x1: u32, y1: u32, x2: u32, y2: u32, color: Color},
+    #[serde(rename="expandCanvas")]
     ExpandCanvas {left: u32, top: u32, right: u32, bottom: u32, color: Color},
+    #[serde(rename="transpose")]
     Transpose,
+    #[serde(rename="rotate90")]
     Rotate90,
+    #[serde(rename="rotate180")]
     Rotae180,
+    #[serde(rename="rotate270")]
     Rotate270,
-    Scale{ w: usize, h: usize, down_filter: Option<Filter>, up_filter: Option<Filter>, sharpen_percent: Option<f32>, flags: Option<usize>}
+    #[serde(rename="scale")]
+    Scale{ w: usize, h: usize,
+        #[serde(rename="downFilter")]
+        down_filter: Option<Filter>,
+        #[serde(rename="upFilter")]
+        up_filter: Option<Filter>,
+        #[serde(rename="sharpenPercent")]
+        sharpen_percent: Option<f32>, flags: Option<usize>}
 }
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum EdgeKind{
+    #[serde(rename="input")]
     Input,
+    #[serde(rename="canvas")]
     Canvas
 }
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub struct Edge{
-    from: i32,
-    to: i32,
-    kind: EdgeKind
+    pub from: i32,
+    pub to: i32,
+    pub kind: EdgeKind
 }
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub struct Graph{
-    nodes: std::collections::HashMap<u32, Node>,
-    edges: Vec<Edge>
+    pub nodes: std::collections::HashMap<u32, Node>,
+    pub edges: Vec<Edge>
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub enum TestEnum{
     A,
     B{c: i32}
+}
+
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub enum IoDirection {
+    #[serde(rename="output")]
+    Output = 8,
+    #[serde(rename="input")]
+    Input = 4,
+}
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub enum IoEnum{
+    #[serde(rename="bytesHex")]
+    BytesHex(String),
+    #[serde(rename="file")]
+    Filename(String),
+    #[serde(rename="url")]
+    Url(String)
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+
+pub enum IoChecksum{
+    #[serde(rename="djb2Hex")]
+    Djb2Hex(String)
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub struct IoObject{
+    #[serde(rename="ioId")]
+    pub io_id: i32,
+    pub direction: IoDirection,
+    pub io: IoEnum,
+    pub checksum: Option<IoChecksum>
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub enum Framewise {
+    #[serde(rename="graph")]
+    Graph(Graph),
+    #[serde(rename="steps")]
+    Steps(Vec<Node>)
+}
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub struct Build001Config {
+    #[serde(rename="enableJpegBlockScaling")]
+    pub enable_jpeg_block_scaling: Option<bool>,
+    #[serde(rename="processAllGifFrames")]
+    pub process_all_gif_frames: Option<bool>,
+}
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
+pub struct Build001 {
+    #[serde(rename="builderConfig")]
+    pub  builder_config: Option<Build001Config>,
+    pub io: Vec<IoObject>,
+    pub framewise: Framewise,
 }

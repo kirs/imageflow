@@ -27,13 +27,13 @@ pub enum IoMode {
     read_seekable = 5, // 1 | 4,
     write_seekable = 6, // 2 | 4,
     read_write_seekable = 15, // 1 | 2 | 4 | 8
-}
-#[repr(C)]
-#[derive(Copy,Clone)]
-pub enum IoDirection {
-    Out = 8,
-    In = 4,
-}
+    }
+    #[repr(C)]
+    #[derive(Copy,Clone)]
+    pub enum IoDirection {
+        Out = 8,
+        In = 4,
+    }
 
 #[repr(C)]
 #[derive(Copy,Clone)]
