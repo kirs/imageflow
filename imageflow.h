@@ -116,10 +116,10 @@ typedef enum flow_node_state {
 } flow_node_state;
 
 typedef enum flow_edgetype {
-    flow_edgetype_null,
-    flow_edgetype_input,
-    flow_edgetype_canvas,
-    flow_edgetype_info,
+    flow_edgetype_null = 0,
+    flow_edgetype_input = 1,
+    flow_edgetype_canvas = 2,
+    flow_edgetype_info = 3,
     flow_edgetype_FORCE_ENUM_SIZE_INT32 = 2147483647
 } flow_edgetype;
 

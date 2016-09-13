@@ -35,6 +35,17 @@ pub enum IoMode {
         In = 4,
     }
 
+
+#[repr(C)]
+#[derive(Copy,Clone)]
+pub enum EdgeKind {
+    None = 0,
+    Input = 1,
+    Canvas = 2,
+    Info = 3
+}
+
+
 #[repr(C)]
 #[derive(Copy,Clone)]
 pub enum PixelFormat {
@@ -303,6 +314,12 @@ extern {
                              -> *mut Graph;
 
 
+    pub fn flow_edge_create(c: *mut Context,
+                                    g: *mut *mut Graph,
+                                    from: i32,
+                                    to: i32,
+                                    kind: EdgeKind)
+                                    -> i32;
     pub fn flow_node_create_decoder(c: *mut Context,
                                     g: *mut *mut Graph,
                                     prev_node: i32,
